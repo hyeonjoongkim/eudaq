@@ -4,23 +4,19 @@
 
 namespace eudaq {
 
-  EUDAQ_DEFINE_EVENT(TLUEvent, str2id("_TLU"));
+EUDAQ_DEFINE_EVENT(TLUEvent, str2id("_TLU"));
 
-  TLUEvent::TLUEvent(Deserializer & ds) :
-    Event(ds)
-  {
-    ds.read(m_extratimes);
-  }
+TLUEvent::TLUEvent(Deserializer &ds) : Event(ds) { ds.read(m_extratimes); }
 
-  void TLUEvent::Print(std::ostream & os) const {
-    Event::Print(os);
-    if (m_extratimes.size() > 0) {
-      os << " [" << m_extratimes.size() << " extra]";
-    }
+void TLUEvent::Print(std::ostream &os) const {
+  Event::Print(os);
+  if (m_extratimes.size() > 0) {
+    os << " [" << m_extratimes.size() << " extra]";
   }
+}
 
-  void TLUEvent::Serialize(Serializer & ser) const {
-    Event::Serialize(ser);
-    ser.write(m_extratimes);
-  }
+void TLUEvent::Serialize(Serializer &ser) const {
+  Event::Serialize(ser);
+  ser.write(m_extratimes);
+}
 }

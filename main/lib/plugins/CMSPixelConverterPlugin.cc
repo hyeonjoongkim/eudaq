@@ -11,36 +11,39 @@
 
 namespace eudaq {
 
-  static const char* EVENT_TYPE = "CMSPixel";
+static const char *EVENT_TYPE = "CMSPixel";
 
-  class CMSPixelConverterPlugin : public DataConverterPlugin {
-  public:
-    // virtual unsigned GetTriggerID(const Event & ev) const{}; 
+class CMSPixelConverterPlugin : public DataConverterPlugin {
+public:
+  // virtual unsigned GetTriggerID(const Event & ev) const{};
 
-    virtual void Initialize(const Event & bore, const Configuration & cnf) {
-      m_converter.Initialize(bore,cnf);
-    }
+  virtual void Initialize(const Event &bore, const Configuration &cnf) {
+    m_converter.Initialize(bore, cnf);
+  }
 
-    virtual bool GetStandardSubEvent(StandardEvent & out, const Event & in) const {
-      return m_converter.GetStandardSubEvent(out,in);
-    }
+  virtual bool GetStandardSubEvent(StandardEvent &out, const Event &in) const {
+    return m_converter.GetStandardSubEvent(out, in);
+  }
 
 #if USE_LCIO && USE_EUTELESCOPE
-    virtual void GetLCIORunHeader(lcio::LCRunHeader & header, eudaq::Event const & bore, eudaq::Configuration const & conf) const {
-      return m_converter.GetLCIORunHeader(header, bore, conf);
-    }
+  virtual void GetLCIORunHeader(lcio::LCRunHeader &header,
+                                eudaq::Event const &bore,
+                                eudaq::Configuration const &conf) const {
+    return m_converter.GetLCIORunHeader(header, bore, conf);
+  }
 
-    virtual bool GetLCIOSubEvent(lcio::LCEvent & result, const Event & source) const {
-      return m_converter.GetLCIOSubEvent(result, source);
-    }
+  virtual bool GetLCIOSubEvent(lcio::LCEvent &result,
+                               const Event &source) const {
+    return m_converter.GetLCIOSubEvent(result, source);
+  }
 #endif
 
-  private:
-    CMSPixelConverterPlugin() : DataConverterPlugin(EVENT_TYPE),
-				   m_converter(EVENT_TYPE) {}
+private:
+  CMSPixelConverterPlugin()
+      : DataConverterPlugin(EVENT_TYPE), m_converter(EVENT_TYPE) {}
 
-    CMSPixelHelper m_converter;
-    static CMSPixelConverterPlugin m_instance;
-  };
-  CMSPixelConverterPlugin CMSPixelConverterPlugin::m_instance;
+  CMSPixelHelper m_converter;
+  static CMSPixelConverterPlugin m_instance;
+};
+CMSPixelConverterPlugin CMSPixelConverterPlugin::m_instance;
 }

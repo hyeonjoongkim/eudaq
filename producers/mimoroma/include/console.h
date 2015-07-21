@@ -1,60 +1,58 @@
 /*
-	-----------------------------------------------------------------------------
+        -----------------------------------------------------------------------------
 
-	               --- CAEN SpA - Computing Systems Division --- 
+                       --- CAEN SpA - Computing Systems Division ---
 
-	-----------------------------------------------------------------------------
+        -----------------------------------------------------------------------------
 
-	Name		:	CONSOLE.H
+        Name		:	CONSOLE.H
 
-	Description :	Include file for 'Console.c'.
-					
-					Add '__LINUX' define to generate a Linux exe file.
+        Description :	Include file for 'Console.c'.
 
-					
-	Date		:	November 2004
-	Release		:	1.0
-	Author		:	C.Landi
+                                        Add '__LINUX' define to generate a Linux
+   exe file.
 
 
+        Date		:	November 2004
+        Release		:	1.0
+        Author		:	C.Landi
 
-	-----------------------------------------------------------------------------
 
-	This file contains the following procedures & functions declaration               
-                                                                          
-	con_init         initialize the console                                  
-	con_end          close the console                                       
-	write_log        write a message into the log file                       
-	con_getch        get a char from console without echoing                 
-	con_kbhit        read a char from console without stopping the program   
-	con_scanf        read formatted data from the console                    
-	con_printf       print formatted output to the standard output stream    
-	gotoxy           set the cursor position                                 
-	con_printf_xy    print formatted output on the X,Y screen position    
-	clrscr           clear the screen                                        
-	clear_line       clear a line                                            
-	delay            wait n milliseconds 
-	
-	-----------------------------------------------------------------------------
+
+        -----------------------------------------------------------------------------
+
+        This file contains the following procedures & functions declaration
+
+        con_init         initialize the console
+        con_end          close the console
+        write_log        write a message into the log file
+        con_getch        get a char from console without echoing
+        con_kbhit        read a char from console without stopping the program
+        con_scanf        read formatted data from the console
+        con_printf       print formatted output to the standard output stream
+        gotoxy           set the cursor position
+        con_printf_xy    print formatted output on the X,Y screen position
+        clrscr           clear the screen
+        clear_line       clear a line
+        delay            wait n milliseconds
+
+        -----------------------------------------------------------------------------
 */
-
 
 #ifndef __CONSOLE_H
 #define __CONSOLE_H
 
-
 //#define __LINUX
-
 
 /****************************************************************************/
 /*                                 short names                              */
 /****************************************************************************/
 
 #ifndef ulong
-#define ulong unsigned long 
+#define ulong unsigned long
 #endif
 #ifndef uint
-#define uint unsigned int 
+#define uint unsigned int
 #endif
 #ifndef ushort
 #define ushort unsigned short
@@ -63,20 +61,18 @@
 #define uchar unsigned char
 #endif
 
-
 /*******************************************************************************/
-/*                       Usefull ascii codes                                   */
+/*                       Usefull ascii codes */
 /*******************************************************************************/
 
-#define CR           0x0D     /* carriage return */
-#define BLANK        0x20     /* blank           */
-#define ESC          0x1B     /* escape          */
-#define BSP          0x08     /* back space      */
+#define CR 0x0D    /* carriage return */
+#define BLANK 0x20 /* blank           */
+#define ESC 0x1B   /* escape          */
+#define BSP 0x08   /* back space      */
 
 /* terminal types */
-#define TERM_NOT_INIT   FALSE
-#define TERM_INIT       TRUE
-
+#define TERM_NOT_INIT FALSE
+#define TERM_INIT TRUE
 
 /****************************************************************************/
 /*                              CON_INIT                                    */
@@ -86,7 +82,6 @@
 
 void con_init(void);
 
-
 /****************************************************************************/
 /*                              CON_END                                     */
 /*--------------------------------------------------------------------------*/
@@ -94,7 +89,6 @@ void con_init(void);
 /****************************************************************************/
 
 void con_end(void);
-
 
 /******************************************************************************/
 /*                             WRITE_LOG                                      */
@@ -106,7 +100,6 @@ void con_end(void);
 
 void write_log(char *);
 
-
 /******************************************************************************/
 /*                               CON_GETCH                                    */
 /*----------------------------------------------------------------------------*/
@@ -115,8 +108,7 @@ void write_log(char *);
 /* Get a char from the console without echoing and return the character read. */
 /******************************************************************************/
 
-int  con_getch(void);
-
+int con_getch(void);
 
 /******************************************************************************/
 /*                               CON_KBHIT                                    */
@@ -130,7 +122,6 @@ int  con_getch(void);
 /******************************************************************************/
 
 char con_kbhit(void);
-
 
 /******************************************************************************/
 /*                               CON_SCANF                                    */
@@ -146,7 +137,6 @@ char con_kbhit(void);
 
 int con_scanf(char *, void *);
 
-
 /******************************************************************************/
 /*                               CON_PRINTF                                   */
 /*----------------------------------------------------------------------------*/
@@ -157,34 +147,31 @@ int con_scanf(char *, void *);
 /* return:         number of characters printed                               */
 /*                 or a negative value if an error occurs                     */
 /*----------------------------------------------------------------------------*/
-/* Print formatted output to the standard output stream                       */ 
+/* Print formatted output to the standard output stream                       */
 /******************************************************************************/
 
-int con_printf(char *,...);
-
+int con_printf(char *, ...);
 
 /****************************************************************************/
 /*                               GOTOXY                                     */
 /*--------------------------------------------------------------------------*/
-/* parameters:     x, y ->   position on the screen                         */ 
+/* parameters:     x, y ->   position on the screen                         */
 /*--------------------------------------------------------------------------*/
 /* Place the cursor at position x,y on the screen                           */
 /****************************************************************************/
 
 void gotoxy(int, int);
 
-
 /****************************************************************************/
 /*                             CON_PRINTF_XY                                */
 /*--------------------------------------------------------------------------*/
-/* parameters:     xpos, ypos ->   position on the screen                   */ 
+/* parameters:     xpos, ypos ->   position on the screen                   */
 /*                 msg        ->   message text                             */
 /*--------------------------------------------------------------------------*/
 /* Print a messege on the X,Y screen position                               */
 /****************************************************************************/
- 
-int con_printf_xy(uint, uint, char *,...);
 
+int con_printf_xy(uint, uint, char *, ...);
 
 /****************************************************************************/
 /*                               CLRSCR                                     */
@@ -194,28 +181,24 @@ int con_printf_xy(uint, uint, char *,...);
 
 void clrscr(void);
 
-
 /****************************************************************************/
 /*                              CLEAR_LINE                                  */
 /*--------------------------------------------------------------------------*/
-/* parameters:     line ->   line to clear                                  */ 
+/* parameters:     line ->   line to clear                                  */
 /*--------------------------------------------------------------------------*/
 /* Clear a line of the screen                                               */
 /****************************************************************************/
 
 void clear_line(uint);
 
-
 /****************************************************************************/
 /*                             DELAY                                        */
 /*--------------------------------------------------------------------------*/
-/* parameters:     del        ->   delay in millisecond                     */ 
+/* parameters:     del        ->   delay in millisecond                     */
 /*--------------------------------------------------------------------------*/
 /* Wait n milliseconds                                                      */
 /****************************************************************************/
 
 void delay(int);
 
-
 #endif
-

@@ -4,7 +4,7 @@
 /*                                                                         */
 /*    V1718Lib.H                                            	     	   */
 /*                                                                         */
-/*                                                                         */ 
+/*                                                                         */
 /*    Created: January 2004                                                */
 /*                                                                         */
 /*                                                                         */
@@ -26,10 +26,10 @@
 #define CAENVME_API CVErrorCodes __stdcall
 //#endif
 
-#else   // WIN32
+#else // WIN32
 
 #define CAENVME_API CVErrorCodes
 
-#endif  // WIN32
+#endif // WIN32
 
-#endif  // V1718OSLIB_H
+#endif // V1718OSLIB_H

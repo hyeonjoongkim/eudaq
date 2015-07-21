@@ -8,15 +8,13 @@
 
 namespace eudaq {
 
-  class Serializer; //$$ change
+class Serializer; //$$ change
 
-  class DLLEXPORT Serializable {
-    public:
-      virtual void Serialize(Serializer &) const = 0;
-      virtual ~Serializable() {}
-
-  };
-
+class DLLEXPORT Serializable {
+public:
+  virtual void Serialize(Serializer &) const = 0;
+  virtual ~Serializable() {}
+};
 }
 
 #endif // EUDAQ_INCLUDED_Serializable

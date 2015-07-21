@@ -13,88 +13,88 @@
 #include <vector>
 #include <string>
 
-
 #include "eudaq/Platform.hh"
-
 
 namespace eutelescope {
 
-  //! This is the SUSHVPIX / APIXMC detector
-  /*!
-   *
-   *  @author Christian Takacs, SUS UNI HD <mailto:ctakacs@rumms.uni-mannheim.de>
-   */
+//! This is the SUSHVPIX / APIXMC detector
+/*!
+ *
+ *  @author Christian Takacs, SUS UNI HD <mailto:ctakacs@rumms.uni-mannheim.de>
+ */
 
-  //class EUTelSUSHVPIXDetector : public EUTelPixelDetector {
-  class  DLLEXPORT  EUTelAPIXMCDetector : public EUTelPixelDetector {
+// class EUTelSUSHVPIXDetector : public EUTelPixelDetector {
+class DLLEXPORT EUTelAPIXMCDetector : public EUTelPixelDetector {
 
-  public:
-    //! Default constructor
-    EUTelAPIXMCDetector(unsigned short fetype=0) ;
+public:
+  //! Default constructor
+  EUTelAPIXMCDetector(unsigned short fetype = 0);
 
+  //! Default destructor
+  virtual ~EUTelAPIXMCDetector() { ; }
 
-    //! Default destructor
-    virtual ~EUTelAPIXMCDetector() {;}
+  //! Get the first pixel along x
+  virtual unsigned short getXMin() const { return _xMin; }
 
-    //! Get the first pixel along x
-    virtual unsigned short getXMin() const { return _xMin ; }
+  //! Get the first pixel along y
+  virtual unsigned short getYMin() const { return _yMin; }
 
-    //! Get the first pixel along y
-    virtual unsigned short getYMin() const { return _yMin ; }
+  //! Get the last pixel along x
+  virtual unsigned short getXMax() const { return _xMax; }
 
-    //! Get the last pixel along x
-    virtual unsigned short getXMax() const { return _xMax ; }
+  //! Get the last pixel along y
+  virtual unsigned short getYMax() const { return _yMax; }
 
-    //! Get the last pixel along y
-    virtual unsigned short getYMax() const { return _yMax ; }
+  //! Get the no of pixel along X
+  virtual unsigned short getXNoOfPixel() const { return _xMax - _xMin + 1; }
 
-    //! Get the no of pixel along X
-    virtual unsigned short getXNoOfPixel() const { return _xMax - _xMin + 1 ; }
+  //! Get the no of pixel along Y
+  virtual unsigned short getYNoOfPixel() const { return _yMax - _yMin + 1; }
 
-    //! Get the no of pixel along Y
-    virtual unsigned short getYNoOfPixel() const { return _yMax - _yMin + 1 ; }
+  //! Get the pixel pitch along X
+  virtual float getXPitch() const { return _xPitch; }
 
-    //! Get the pixel pitch along X
-    virtual float getXPitch() const { return _xPitch ; }
+  //! Get the pixel pitch along Y
+  virtual float getYPitch() const { return _yPitch; }
 
-    //! Get the pixel pitch along Y
-    virtual float getYPitch() const  { return _yPitch ; }
+  //! Get signal polarity
+  virtual short getSignalPolarity() const { return _signalPolarity; }
 
-    //! Get signal polarity
-    virtual short getSignalPolarity() const { return _signalPolarity ; }
+  //! Get detector name
+  virtual std::string getDetectorName() const { return _name; }
 
-    //! Get detector name
-    virtual std::string getDetectorName() const { return _name ; }
+  //! Get RO mode
+  virtual std::string getMode() const { return _mode; }
 
-    //! Get RO mode
-    virtual std::string getMode() const { return _mode ; }
+  //! Get marker position
+  virtual std::vector<size_t> getMarkerPosition() const { return _markerPos; }
 
-    //! Get marker position
-    virtual std::vector< size_t > getMarkerPosition() const { return _markerPos ; }
+  //! Has marker?
+  virtual bool hasMarker() const {
+    if (_markerPos.size() != 0)
+      return true;
+    else
+      return false;
+  }
 
-    //! Has marker?
-    virtual bool hasMarker() const  { if ( _markerPos.size() != 0 ) return true; else return false; }
+  //! Set the RO modality
+  void setMode(std::string mode);
 
-    //! Set the RO modality
-    void setMode( std::string mode );
+  //! Has subchannel?
+  virtual bool hasSubChannels() const;
 
-    //! Has subchannel?
-    virtual bool hasSubChannels() const;
+  //! Get subchannels
+  virtual std::vector<EUTelROI> getSubChannels(bool withMarker = false) const;
 
-    //! Get subchannels
-    virtual std::vector< EUTelROI > getSubChannels( bool withMarker = false ) const ;
+  //! Get a subchannel boundaries
+  virtual EUTelROI getSubChannelBoundary(size_t iChan,
+                                         bool witMarker = false) const;
 
-    //! Get a subchannel boundaries
-    virtual EUTelROI getSubChannelBoundary( size_t iChan, bool witMarker = false ) const ;
+  //! This method is used to print out the detector
+  virtual void print(std::ostream &os) const;
 
-
-    //! This method is used to print out the detector
-    virtual void print(std::ostream& os) const ;
-
-  protected:
-
-  };
-
+protected:
+};
 }
 
 #endif

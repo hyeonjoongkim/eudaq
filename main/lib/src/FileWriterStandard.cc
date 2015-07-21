@@ -6,41 +6,45 @@
 
 namespace eudaq {
 
-  class FileWriterStandard : public FileWriter {
-    public:
-      FileWriterStandard(const std::string &);
-      virtual void StartRun(unsigned);
-      virtual void WriteEvent(const DetectorEvent &);
-      virtual uint64_t FileBytes() const;
-      virtual ~FileWriterStandard();
-    private:
-      FileSerializer * m_ser;
-  };
+class FileWriterStandard : public FileWriter {
+public:
+  FileWriterStandard(const std::string &);
+  virtual void StartRun(unsigned);
+  virtual void WriteEvent(const DetectorEvent &);
+  virtual uint64_t FileBytes() const;
+  virtual ~FileWriterStandard();
 
-  namespace {
-    static RegisterFileWriter<FileWriterStandard> reg("standard");
-  }
+private:
+  FileSerializer *m_ser;
+};
 
-  FileWriterStandard::FileWriterStandard(const std::string & /*param*/) : m_ser(0) {
-    //EUDAQ_DEBUG("Constructing FileWriterStandard(" + to_string(param) + ")");
-  }
+namespace {
+static RegisterFileWriter<FileWriterStandard> reg("standard");
+}
 
-  void FileWriterStandard::StartRun(unsigned runnumber) {
-    delete m_ser;
-    m_ser = new FileSerializer(FileNamer(m_filepattern).Set('X', ".std").Set('R', runnumber));
-  }
+FileWriterStandard::FileWriterStandard(const std::string & /*param*/)
+    : m_ser(0) {
+  // EUDAQ_DEBUG("Constructing FileWriterStandard(" + to_string(param) + ")");
+}
 
-  void FileWriterStandard::WriteEvent(const DetectorEvent & ev) {
-    if (!m_ser) EUDAQ_THROW("FileWriterStandard: Attempt to write unopened file");
-    if (ev.IsBORE()) PluginManager::Initialize(ev);
-    m_ser->write(PluginManager::ConvertToStandard(ev));
-    m_ser->Flush();
-  }
+void FileWriterStandard::StartRun(unsigned runnumber) {
+  delete m_ser;
+  m_ser = new FileSerializer(
+      FileNamer(m_filepattern).Set('X', ".std").Set('R', runnumber));
+}
 
-  FileWriterStandard::~FileWriterStandard() {
-    delete m_ser;
-  }
+void FileWriterStandard::WriteEvent(const DetectorEvent &ev) {
+  if (!m_ser)
+    EUDAQ_THROW("FileWriterStandard: Attempt to write unopened file");
+  if (ev.IsBORE())
+    PluginManager::Initialize(ev);
+  m_ser->write(PluginManager::ConvertToStandard(ev));
+  m_ser->Flush();
+}
 
-  uint64_t FileWriterStandard::FileBytes() const { return m_ser ? m_ser->FileBytes() : 0; }
+FileWriterStandard::~FileWriterStandard() { delete m_ser; }
 
+uint64_t FileWriterStandard::FileBytes() const {
+  return m_ser ? m_ser->FileBytes() : 0;
+}
 }

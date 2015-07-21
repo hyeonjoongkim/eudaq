@@ -5,20 +5,20 @@
 #include <stdio.h>
 #include <signal.h>
 #include <sys/types.h>
-#include<sys/time.h>
+#include <sys/time.h>
 #include <vector>
 using namespace std;
 
 #define NumOfCha 1280
 #define NumOfSi 3
-#define BuffSize NumOfCha*NumOfSi
+#define BuffSize NumOfCha *NumOfSi
 
-#define EventLength 1280*3 + 20 + 256 + 10
+#define EventLength 1280 * 3 + 20 + 256 + 10
 
 class MVDController {
 public:
   MVDController();
-  void Configure(const eudaq::Configuration & conf);
+  void Configure(const eudaq::Configuration &conf);
   void ReadCalFile();
   void WriteCalFile();
   bool DataReady();
@@ -34,17 +34,18 @@ public:
   void Clear();
   unsigned NumADCs() const { return NumOfADC; }
   virtual ~MVDController();
-  const char* pather;
+  const char *pather;
+
 private:
   unsigned NumOfChan, NumOfSil, NumOfADC;
 
   struct timeval tv;
   unsigned int sec;
   unsigned int microsec;
-  time_t    timer;
+  time_t timer;
   struct tm *date;
 
-  ModV551 * m_modv551;
+  ModV551 *m_modv551;
   std::vector<ModV550 *> m_modv550;
   std::vector<bool> m_enabled;
 
@@ -54,5 +55,4 @@ private:
   unsigned int ChNum;
   unsigned int ChData;
   unsigned int SilcPointer;
-
 };

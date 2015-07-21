@@ -12,10 +12,10 @@
 /*=====================================================================*/
 /*          class Mod_v551    Sequencer ADC                            */
 /*=====================================================================*/
-class ModV551{       /* Sequencer */
+class ModV551 {/* Sequencer */
 
-  int debug;    /* debug level */
-  unsigned long udelay;   /* VME R/W delay */
+  int debug;            /* debug level */
+  unsigned long udelay; /* VME R/W delay */
   int IRQ_Vector;
   unsigned int VMEaddr;
   unsigned int Len;
@@ -38,7 +38,6 @@ class ModV551{       /* Sequencer */
   unsigned int IRQvector; /* Interrupt Vector   w/o   */
 
 public:
-
   VMEptr vme;
 
   unsigned short int data;
@@ -75,9 +74,8 @@ public:
   void SetNChannels(unsigned int);
   void GetNChannels();
   void SetTime(int, int, int, int, int);
-  void GetTime(int*, int*, int*, int*, int*);
+  void GetTime(int *, int *, int *, int *, int *);
   void SetVCAL(unsigned int);
-  //void CalibAutoTrig();
+  // void CalibAutoTrig();
   void Init(unsigned int);
-
 };

@@ -3,14 +3,12 @@
 
 #include "mpxpluginmgrapi.h"
 
-
-class medipixChipId
-{
+class medipixChipId {
 public:
-	DEVID deviceId;
-	int chipNo;
-	DevInfo deviceInfo;
-	i16* databuffer;
-	u32 sizeOfDataBuffer;
-	i16* errorFrame;
+  DEVID deviceId;
+  int chipNo;
+  DevInfo deviceInfo;
+  i16 *databuffer;
+  u32 sizeOfDataBuffer;
+  i16 *errorFrame;
 };
