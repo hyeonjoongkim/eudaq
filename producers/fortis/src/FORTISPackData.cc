@@ -1,7 +1,7 @@
 
 
-// take the raw data from device add header and trailer and pack into vector for transmission to data-collector
-
+// take the raw data from device add header and trailer and pack into vector for
+// transmission to data-collector
 
 //    unsigned int trailer = 0xdeadbeef;
 //

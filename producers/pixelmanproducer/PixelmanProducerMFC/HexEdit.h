@@ -1,9 +1,10 @@
-// File    : HexEdit.cpp 
+// File    : HexEdit.cpp
 // Version : 1.0
 // Date    : 21. Jan 2005
 // Author  : Luo Pei'dn
 // Email   : coollpe@hotmail.com
-// Systems : VC6.0/7.0 and VC7.1 (Run under (Window 98/ME), Windows Nt 2000/XP/2003)
+// Systems : VC6.0/7.0 and VC7.1 (Run under (Window 98/ME), Windows Nt
+// 2000/XP/2003)
 //
 // For bugreport please email me
 //
@@ -22,71 +23,73 @@
 /////////////////////////////////////////////////////////////////////////////
 // CHexEdit window
 struct TextColor {
-		COLORREF clrTextColor;
-		COLORREF clrBkColor;
+  COLORREF clrTextColor;
+  COLORREF clrBkColor;
 };
-class CHexEdit : public CEdit
-{
-// Construction
+class CHexEdit : public CEdit {
+  // Construction
 public:
-	CHexEdit();
+  CHexEdit();
 
-// Attributes
+  // Attributes
 public:
-
 protected:
-	TextColor m_icHexText;
-	TextColor m_icDecText;
+  TextColor m_icHexText;
+  TextColor m_icDecText;
+
 private:
-	bool m_bEnd;
-	bool m_bHex;
+  bool m_bEnd;
+  bool m_bHex;
 
-// Operations
+  // Operations
 public:
-
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CHexEdit)
-	public:
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	//}}AFX_VIRTUAL
-
-// Implementation
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(CHexEdit)
 public:
-	virtual ~CHexEdit();
+  virtual BOOL PreTranslateMessage(MSG *pMsg);
+  //}}AFX_VIRTUAL
 
-	// Generated message map functions
+  // Implementation
+public:
+  virtual ~CHexEdit();
+
+  // Generated message map functions
 protected:
-	//{{AFX_MSG(CHexEdit)
-	afx_msg HBRUSH CtlColor(CDC* pDC, UINT nCtlColor);
-	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
-//	afx_msg void OnChange();
-	//}}AFX_MSG
+  //{{AFX_MSG(CHexEdit)
+  afx_msg HBRUSH CtlColor(CDC *pDC, UINT nCtlColor);
+  afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
+  //	afx_msg void OnChange();
+  //}}AFX_MSG
 
-	DECLARE_MESSAGE_MAP()
+  DECLARE_MESSAGE_MAP()
 public:
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);
+  virtual void DoDataExchange(CDataExchange *pDX);
+
 public:
-	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
+  virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
+  afx_msg void OnContextMenu(CWnd * /*pWnd*/, CPoint /*point*/);
+
 private:
-	CBrush m_bkDecBrush;//background dec color brush
-	CBrush m_bkHexBrush;//background hex color brush
-	bool IsHexConvertableText(LPTSTR _text);
-	void FormatClipboard();
+  CBrush m_bkDecBrush; // background dec color brush
+  CBrush m_bkHexBrush; // background hex color brush
+  bool IsHexConvertableText(LPTSTR _text);
+  void FormatClipboard();
+
 public:
-	void SetHexColor(COLORREF clrBack, COLORREF clrText);
-	void SetDecColor(COLORREF clrBack, COLORREF clrText);
-	afx_msg void OnEnUpdate();
-	afx_msg LRESULT OnConvert(WPARAM wParam, LPARAM lParam);
-	unsigned int GetValue(void);
-	void SetValue(unsigned int _value,bool _bHex=false);
+  void SetHexColor(COLORREF clrBack, COLORREF clrText);
+  void SetDecColor(COLORREF clrBack, COLORREF clrText);
+  afx_msg void OnEnUpdate();
+  afx_msg LRESULT OnConvert(WPARAM wParam, LPARAM lParam);
+  unsigned int GetValue(void);
+  void SetValue(unsigned int _value, bool _bHex = false);
 };
 
 /////////////////////////////////////////////////////////////////////////////
 
 //{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+// Microsoft Visual C++ will insert additional declarations immediately before
+// the previous line.
 
 #endif // !defined(AFX_HEXEDIT_H__52939FC1_17E0_467F_8AE8_6A0E367FB5F3__INCLUDED_)

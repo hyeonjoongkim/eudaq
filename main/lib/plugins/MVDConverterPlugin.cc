@@ -2,7 +2,7 @@
 
 namespace eudaq {
 
-  static const char* EVENT_TYPE = "MVD";
+  static const char *EVENT_TYPE = "MVD";
 
   // Test Events have nothing to convert
   // This class is only here to prevent a runtime errors
@@ -12,5 +12,4 @@ namespace eudaq {
   };
 
   MVDConverterPlugin MVDConverterPlugin::m_instance;
-
 }
