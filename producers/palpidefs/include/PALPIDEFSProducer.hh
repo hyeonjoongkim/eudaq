@@ -204,7 +204,7 @@ protected:
   void SetBackBiasVoltage(const eudaq::Configuration &param);
   void ControlLinearStage(const eudaq::Configuration &param);
   bool ConfigChip(int id, TpAlpidefs* dut, std::string configFile);
-  int BuildEvent(unsigned long count);
+  int BuildEvent();
   void SendEOR();
   void SendStatusEvent();
   void PrintQueueStatus();
