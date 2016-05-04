@@ -1478,8 +1478,11 @@ int PALPIDEFSProducer::BuildEvent() {
 
     SingleEvent* single_ev = m_next_event[i];
    
-    if (!m_timestamp_reference[i]) 
+    if (!m_timestamp_reference[i]) {
+      if (timestamp > m_next_event[i]->m_timestamp_corrected)
+        timestamp = m_next_event[i]->m_timestamp_corrected;
       m_timestamp_reference[i] = timestamp;
+    }
 
     single_ev->m_timestamp_reference = m_timestamp_reference[i];
 

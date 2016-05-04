@@ -82,6 +82,46 @@ namespace eudaq {
     DT_UNKNOWN
   };
 
+  class LayerPixHits {
+    public:
+      LayerPixHits() :
+        layerid(0), eventid(0), isstatusevent(false) {}
+      ~LayerPixHits() {}
+
+      vector<int> GetX() {
+        return hit_x;
+      }
+      vector<int> GetY() {
+        return hit_y;
+      }
+      int GetLayerID() {
+        return layerid;
+      }
+      bool IsStatusEvent() {
+        return isstatusevent;
+      }
+      unsigned int GetEventID() {
+        return eventid;
+      }
+      void DiscardData() {
+        hit_x.clear();
+        hit_y.clear();
+        layerid = 0;
+        eventid = 0;
+        isstatusevent = false;
+      }
+
+    private:
+      vector<int> hit_x;
+      vector<int> hit_y;
+      int layerid;             // maybe not needed?
+      unsigned int eventid;
+      bool isstatusevent;      // maybe not needed?
+      uint64_t timestamp;
+      int strobecounter;
+  };
+
+
   // Plugin inheritance
   class PALPIDEFSConverterPlugin : public DataConverterPlugin {
 
@@ -113,6 +153,8 @@ namespace eudaq {
 
       m_chip_type = new int[m_nLayers];
       m_fw_version = new unsigned int[m_nLayers];
+      m_pixhits.resize(m_nLayers);
+
       m_Vaux = new int[m_nLayers];
       m_VresetP = new int[m_nLayers];
       m_VresetD = new int[m_nLayers];
@@ -442,6 +484,8 @@ namespace eudaq {
       cout << "GetStandardSubEvent " << ev.GetEventNumber() << " "
            << sev.GetEventNumber() << endl;
 #endif
+      unsigned int eventnumber = ev.GetEventNumber();
+
 
       if (ev.IsEORE()) {
         // TODO EORE
@@ -524,11 +568,18 @@ namespace eudaq {
           uint64_t trigger_ids[maxLayers];
           uint64_t timestamps[maxLayers];
           uint64_t timestamps_reference[maxLayers];
+          vector<LayerPixHits> temp_prev_hits(m_nLayers);
+          
+
           for (int i = 0; i < maxLayers; i++) {
             layers_found[i] = false;
             trigger_ids[i] = (uint64_t)ULONG_MAX;
             timestamps[i] = (uint64_t)ULONG_MAX;
             timestamps_reference[i] = (uint64_t)ULONG_MAX;
+          }
+
+          for (int i = 0; i < m_nLayers; i++) {
+            temp_prev_hits[current_layer].eventid = eventnumber;
           }
 
 // RAW dump
@@ -579,11 +630,14 @@ namespace eudaq {
 
               unsigned int payload_length = payload_end+1-payload_begin;
 
+              unsigned int strobecounter;  // 2 bit register that rotates 0, 1, 2, 3, 0, 1, ...
+              unsigned int bunchcounter;   // we don't need this for the moment
+
               // HEADER
               headerOK  = m_daq_board[current_layer]->DecodeEventHeader(&data[0]+pos, &header);
 
               // PAYLOAD
-              eventOK   = m_dut[current_layer]->DecodeEvent(&data[0]+payload_begin, payload_length, &hits);
+              eventOK   = m_dut[current_layer]->DecodeEvent(&data[0]+payload_begin, payload_length, &hits, &strobecounter, &bunchcounter);
 
               // TRAILER
               trailerOK = m_daq_board[current_layer]->DecodeEventTrailer(&data[0]+trailer_begin, &header);
@@ -609,7 +663,20 @@ namespace eudaq {
                 // adjust the bottom-right pixel
                 if ((hits[iHit].address % 4) == 0) y += 1;
 
-                planes[current_layer]->PushPixel(x, y, 1, (unsigned int)0);
+                unsigned long jHit = 0;
+                do {
+                  if (x == m_pixhits[current_layer].hit_x[jHit]  && y == m_pixhits[current_layer].hit_y[jHit])
+                    continue; // need to make more conditions : comparing timestamp & strobecounter?
+                  else {
+                    temp_prev_hits[current_layer].hit_x.push_back(x);
+                    temp_prev_hits[current_layer].hit_y.push_back(x);
+                    temp_prev_hits[current_layer].strobecounter = strobecounter;
+                    planes[current_layer]->PushPixel(x, y, 1, (unsigned int)0);
+                  }
+
+                  jHit++;
+                } while (jHit < m_pixhits[current_layer].hit_x.size())  // comparing hits to previous ones
+
               }
             }
 
@@ -682,6 +749,8 @@ namespace eudaq {
             delete planes[i];
           }
           delete[] planes;
+
+          m_pixhits = temp_prev_hits;  // after finishing all stuff, change m_pixhits to current event pixhit data
           // Indicate that data was successfully converted
           return true;
         }
@@ -809,6 +878,7 @@ protected:
   string *m_configs;
   int *m_chip_type;
   unsigned int *m_fw_version;
+  vector<LayerPixHits> m_pixhits;
   int *m_Vaux;
   int *m_VresetP;
   int *m_VresetD;
