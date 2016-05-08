@@ -246,7 +246,7 @@ namespace eudaq {
                         row=113-row;
                     }
                     eutelescope::EUTelGenericSparsePixel *thisHit = new eutelescope::EUTelGenericSparsePixel(row, col, 1, 1);
-                    sparseFrame->addSparsePixel( thisHit );
+                    sparseFrame->addSparsePixel( *thisHit );
                     tmphits.push_back( thisHit );
                 }
                 hit2=hit2>>1;
@@ -262,7 +262,7 @@ namespace eudaq {
                         row=113-row;
                     }
                     eutelescope::EUTelGenericSparsePixel *thisHit = new eutelescope::EUTelGenericSparsePixel(row, col, 1, 1);
-                    sparseFrame->addSparsePixel( thisHit );
+                    sparseFrame->addSparsePixel( *thisHit );
                     tmphits.push_back( thisHit );
                 }
                 hit=hit>>1;
