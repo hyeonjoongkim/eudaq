@@ -214,7 +214,7 @@ namespace eudaq {
                return false;
           }
           eutelescope::EUTelGenericSparsePixel *thisHit = new eutelescope::EUTelGenericSparsePixel(53, 19, cnt_max-cnt_base, trigger_number);
-          sparseFrame->addSparsePixel( thisHit );
+          sparseFrame->addSparsePixel( *thisHit );
           tmphits.push_back( thisHit );
           // write TrackerData object that contains info from one sensor to LCIO collection
           zsDataCollection->push_back( zsFrame.release() );
