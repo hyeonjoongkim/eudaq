@@ -286,7 +286,7 @@ namespace eudaq {
 	      int lvl1=hits[i].lv1;
 	      int ToT=hits[i].tot;
 	      eutelescope::EUTelGenericSparsePixel *thisHit = new eutelescope::EUTelGenericSparsePixel( col, row, ToT, lvl1);
-	      sparseFrame->addSparsePixel( thisHit );
+	      sparseFrame->addSparsePixel( *thisHit );
 	      tmphits.push_back( thisHit );
 	      /*
 	      //ganged pixels bottom
@@ -294,12 +294,12 @@ namespace eudaq {
 	      row = 336;
 	      col=col;
 	      eutelescope::EUTelGenericSparsePixel *thisHitgang1 = new eutelescope::EUTelGenericSparsePixel( row, col, ToT,  lvl1);
-	      sparseFrame->addSparsePixel( thisHitgang1 );
+	      sparseFrame->addSparsePixel( *thisHitgang1 );
 	      tmphits.push_back( thisHitgang1 );
 	      row = 340;
 	      col=col;
 	      eutelescope::EUTelGenericSparsePixel *thisHitgang2 = new eutelescope::EUTelGenericSparsePixel( row, col, ToT,  lvl1);
-	      sparseFrame->addSparsePixel( thisHitgang2 );
+	      sparseFrame->addSparsePixel( *thisHitgang2 );
 	      tmphits.push_back( thisHitgang2 );
 	      }
 	      
@@ -307,12 +307,12 @@ namespace eudaq {
 	      row = 337;
 	      col=col;
 	      eutelescope::EUTelGenericSparsePixel *thisHitgang1 = new eutelescope::EUTelGenericSparsePixel( row, col, ToT,  lvl1);
-	      sparseFrame->addSparsePixel( thisHitgang1 );
+	      sparseFrame->addSparsePixel( *thisHitgang1 );
 	      tmphits.push_back( thisHitgang1 );
 	      row = 341;
 	      col=col;
 	      eutelescope::EUTelGenericSparsePixel *thisHitgang2 = new eutelescope::EUTelGenericSparsePixel( row, col, ToT,  lvl1);
-	      sparseFrame->addSparsePixel( thisHitgang2 );
+	      sparseFrame->addSparsePixel( *thisHitgang2 );
 	      tmphits.push_back( thisHitgang2 );
 	      }
 	      
@@ -320,12 +320,12 @@ namespace eudaq {
 	      row = 338;
 	      col=col;
 	      eutelescope::EUTelGenericSparsePixel *thisHitgang1 = new eutelescope::EUTelGenericSparsePixel( row, col, ToT,  lvl1);
-	      sparseFrame->addSparsePixel( thisHitgang1 );
+	      sparseFrame->addSparsePixel( *thisHitgang1 );
 	      tmphits.push_back( thisHitgang1 );
 	      row = 342;
 	      col=col;
 	      eutelescope::EUTelGenericSparsePixel *thisHitgang2 = new eutelescope::EUTelGenericSparsePixel( row, col, ToT,  lvl1);
-	      sparseFrame->addSparsePixel( thisHitgang2 );
+	      sparseFrame->addSparsePixel( *thisHitgang2 );
 	      tmphits.push_back( thisHitgang2 );
 	      }
 	      
@@ -333,12 +333,12 @@ namespace eudaq {
 	      row = 339;
 	      col=col;
 	      eutelescope::EUTelGenericSparsePixel *thisHitgang1 = new eutelescope::EUTelGenericSparsePixel( row, col, ToT,  lvl1);
-	      sparseFrame->addSparsePixel( thisHitgang1 );
+	      sparseFrame->addSparsePixel( *thisHitgang1 );
 	      tmphits.push_back( thisHitgang1 );
 	      row = 343;
 	      col=col;
 	      eutelescope::EUTelGenericSparsePixel *thisHitgang2 = new eutelescope::EUTelGenericSparsePixel( row, col, ToT,  lvl1);
-	      sparseFrame->addSparsePixel( thisHitgang2 );
+	      sparseFrame->addSparsePixel( *thisHitgang2 );
 	      tmphits.push_back( thisHitgang2 );
 	      }
 	      
@@ -347,12 +347,12 @@ namespace eudaq {
 	      row = 348;
 	      col=col;
 	      eutelescope::EUTelGenericSparsePixel *thisHitgang1 = new eutelescope::EUTelGenericSparsePixel( row, col, ToT,  lvl1);
-	      sparseFrame->addSparsePixel( thisHitgang1 );
+	      sparseFrame->addSparsePixel( *thisHitgang1 );
 	      tmphits.push_back( thisHitgang1 );
 	      row = 344;
 	      col=col;
 	      eutelescope::EUTelGenericSparsePixel *thisHitgang2 = new eutelescope::EUTelGenericSparsePixel( row, col, ToT,  lvl1);
-	      sparseFrame->addSparsePixel( thisHitgang2 );
+	      sparseFrame->addSparsePixel( *thisHitgang2 );
 	      tmphits.push_back( thisHitgang2 );
 	      }
 	      
@@ -360,12 +360,12 @@ namespace eudaq {
 	      row = 349;
 	      col=col;
 	      eutelescope::EUTelGenericSparsePixel *thisHitgang1 = new eutelescope::EUTelGenericSparsePixel( row, col, ToT,  lvl1);
-	      sparseFrame->addSparsePixel( thisHitgang1 );
+	      sparseFrame->addSparsePixel( *thisHitgang1 );
 	      tmphits.push_back( thisHitgang1 );
 	      row = 345;
 	      col=col;
 	      eutelescope::EUTelGenericSparsePixel *thisHitgang2 = new eutelescope::EUTelGenericSparsePixel( row, col, ToT,  lvl1);
-	      sparseFrame->addSparsePixel( thisHitgang2 );
+	      sparseFrame->addSparsePixel( *thisHitgang2 );
 	      tmphits.push_back( thisHitgang2 );
 	      }
 	      
@@ -373,12 +373,12 @@ namespace eudaq {
 	      row = 350;
 	      col=col;
 	      eutelescope::EUTelGenericSparsePixel *thisHitgang1 = new eutelescope::EUTelGenericSparsePixel( row, col, ToT,  lvl1);
-	      sparseFrame->addSparsePixel( thisHitgang1 );
+	      sparseFrame->addSparsePixel( *thisHitgang1 );
 	      tmphits.push_back( thisHitgang1 );
 	      row = 346;
 	      col=col;
 	      eutelescope::EUTelGenericSparsePixel *thisHitgang2 = new eutelescope::EUTelGenericSparsePixel( row, col, ToT,  lvl1);
-	      sparseFrame->addSparsePixel( thisHitgang2 );
+	      sparseFrame->addSparsePixel( *thisHitgang2 );
 	      tmphits.push_back( thisHitgang2 );
 	      }
 	      
@@ -386,12 +386,12 @@ namespace eudaq {
 	      row = 351;
 	      col=col;
 	      eutelescope::EUTelGenericSparsePixel *thisHitgang1 = new eutelescope::EUTelGenericSparsePixel( row, col, ToT,  lvl1);
-	      sparseFrame->addSparsePixel( thisHitgang1 );
+	      sparseFrame->addSparsePixel( *thisHitgang1 );
 	      tmphits.push_back( thisHitgang1 );
 	      row = 347;
 	      col=col;
 	      eutelescope::EUTelGenericSparsePixel *thisHitgang2 = new eutelescope::EUTelGenericSparsePixel( row, col, ToT,  lvl1);
-	      sparseFrame->addSparsePixel( thisHitgang2 );
+	      sparseFrame->addSparsePixel( *thisHitgang2 );
 	      tmphits.push_back( thisHitgang2 );
 	      }
 	      */
@@ -412,7 +412,7 @@ namespace eudaq {
 			    int col = ( (rem4r<2 && rem2c==1) || (rem4r>1 && rem2c==0) ) ? Col1*2 : Col1*2+1;
 			    int row = (int)(Row1/2);
 			    eutelescope::EUTelGenericSparsePixel *thisHit = new eutelescope::EUTelGenericSparsePixel( col, row, hits[i].tot, hits[i].lv1);
-			    sparseFrame->addSparsePixel( thisHit );
+			    sparseFrame->addSparsePixel( *thisHit );
 			    tmphits.push_back( thisHit );
 			    }
 			    else
@@ -421,12 +421,12 @@ namespace eudaq {
 		int col = hits[i].col;
 		int row = hits[i].row;
 		eutelescope::EUTelGenericSparsePixel *thisHit = new eutelescope::EUTelGenericSparsePixel( col, row, hits[i].tot, hits[i].lv1);
-		sparseFrame->addSparsePixel( thisHit );
+		sparseFrame->addSparsePixel( *thisHit );
 		tmphits.push_back( thisHit );
 	      }
 	      //int col=(1+m_fepos[hits[i].link])*NCOL-1-hits[i].col; //left or right on 2-chip module
 	      // eutelescope::EUTelGenericSparsePixel *thisHit = new eutelescope::EUTelGenericSparsePixel( col, row, hits[i].tot, hits[i].lv1);
-	      //sparseFrame->addSparsePixel( thisHit );
+	      //sparseFrame->addSparsePixel( *thisHit );
 	      // tmphits.push_back( thisHit );
 	      
 	    }
