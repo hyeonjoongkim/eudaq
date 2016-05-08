@@ -119,6 +119,7 @@ namespace eudaq {
       bool isstatusevent;      // maybe not needed?
       uint64_t timestamp;
       int strobecounter;
+      bool isemptyevent;
   };
 
 
@@ -603,6 +604,8 @@ namespace eudaq {
             bool headerOK  = true;
             bool eventOK   = false;
             bool trailerOK = true;
+            bool isEmpty = false;
+            bool secondevent = true;
 
             if (m_DataVersion==2) {
               eventOK =  m_dut[current_layer]->DecodeEvent(&data[0]+pos, data_end+1-pos, &hits);
@@ -626,6 +629,9 @@ namespace eudaq {
 
               // PAYLOAD
               eventOK   = m_dut[current_layer]->DecodeEvent(&data[0]+payload_begin, payload_length, &hits, &strobecounter, &bunchcounter);
+
+              // Check Empty event or not
+              isEmpty = (m_dut[current_layer]->CheckDataType(&data[0]+payload_begin) == DT_EMPTYFRAME) ? true : false;
 
               // TRAILER
               trailerOK = m_daq_board[current_layer]->DecodeEventTrailer(&data[0]+trailer_begin, &header);
@@ -653,7 +659,7 @@ namespace eudaq {
 
                 unsigned long jHit = 0;
                 do {
-                  if (x == m_pixhits[current_layer].hit_x[jHit]  && y == m_pixhits[current_layer].hit_y[jHit])
+                  if (x == m_pixhits[current_layer].hit_x[jHit]  && y == m_pixhits[current_layer].hit_y[jHit] || isEmpty)
                     continue; // need to make more conditions : comparing timestamp & strobecounter?
                   else {
                     temp_prev_hits[current_layer].hit_x.push_back(x);
@@ -661,7 +667,6 @@ namespace eudaq {
                     temp_prev_hits[current_layer].strobecounter = strobecounter;
                     planes[current_layer]->PushPixel(x, y, 1, (unsigned int)0);
                   }
-
                   jHit++;
                 } while (jHit < m_pixhits[current_layer].hit_x.size())  // comparing hits to previous ones
 
