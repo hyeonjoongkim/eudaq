@@ -86,7 +86,10 @@ namespace eudaq {
   class LayerPixHits {
     public:
       LayerPixHits() :
-        layerid(0), eventid(0), isstatusevent(false) {}
+        layerid(0), eventid(0), isstatusevent(false) {
+          hit_x.clear();
+          hit_y.clear();
+        }
       ~LayerPixHits() {}
 
       vector<int> GetX() {
@@ -111,8 +114,6 @@ namespace eudaq {
         eventid = 0;
         isstatusevent = false;
       }
-
-    private:
       vector<int> hit_x;
       vector<int> hit_y;
       int layerid;             // maybe not needed?
@@ -155,6 +156,8 @@ namespace eudaq {
 
       m_chip_type = new int[m_nLayers];
       m_fw_version = new unsigned int[m_nLayers];
+
+      m_pixhits.clear();
 
       m_Vaux = new int[m_nLayers];
       m_VresetP = new int[m_nLayers];
@@ -567,7 +570,9 @@ namespace eudaq {
           }
 
           for (int i = 0; i < m_nLayers; i++) {
-            temp_prev_hits[current_layer].eventid = eventnumber;
+            temp_prev_hits[i].hit_x.clear();
+            temp_prev_hits[i].hit_y.clear();
+            temp_prev_hits[i].eventid = eventnumber;
           }
 
 // RAW dump
@@ -604,8 +609,10 @@ namespace eudaq {
             bool headerOK  = true;
             bool eventOK   = false;
             bool trailerOK = true;
-            bool isEmpty = false;
+//            bool isEmpty = false;
             bool secondevent = true;
+            unsigned int strobecounter;  // 2 bit register that rotates 0, 1, 2, 3, 0, 1, ...
+            unsigned int bunchcounter;   // we don't need this for the moment
 
             if (m_DataVersion==2) {
               eventOK =  m_dut[current_layer]->DecodeEvent(&data[0]+pos, data_end+1-pos, &hits);
@@ -621,17 +628,16 @@ namespace eudaq {
 
               unsigned int payload_length = payload_end+1-payload_begin;
 
-              unsigned int strobecounter;  // 2 bit register that rotates 0, 1, 2, 3, 0, 1, ...
-              unsigned int bunchcounter;   // we don't need this for the moment
 
               // HEADER
               headerOK  = m_daq_board[current_layer]->DecodeEventHeader(&data[0]+pos, &header);
 
               // PAYLOAD
-              eventOK   = m_dut[current_layer]->DecodeEvent(&data[0]+payload_begin, payload_length, &hits, &strobecounter, &bunchcounter);
+              eventOK   = m_dut[current_layer]->DecodeEvent(&data[0]+payload_begin, payload_length, &hits);
 
               // Check Empty event or not
-              isEmpty = (m_dut[current_layer]->CheckDataType(&data[0]+payload_begin) == DT_EMPTYFRAME) ? true : false;
+//              if (m_chip_type[current_layer] == 3) 
+//                isEmpty = ((TpAlpidefs3*)(m_dut[current_layer])->CheckDataType(&data[0]+payload_begin) == DT_EMPTYFRAME)  ? true : false;
 
               // TRAILER
               trailerOK = m_daq_board[current_layer]->DecodeEventTrailer(&data[0]+trailer_begin, &header);
@@ -657,20 +663,35 @@ namespace eudaq {
                 // adjust the bottom-right pixel
                 if ((hits[iHit].address % 4) == 0) y += 1;
 
-                for (int istack = 0; istack < m_pixhits.size(); istack++) {
-                  unsigned long jHit = 0;
-                  do {
-                    if (x == m_pixhits[istack][current_layer].hit_x[jHit]  && y == m_pixhits[istack][current_layer].hit_y[jHit] || isEmpty)
-                      continue; // need to make more conditions : comparing timestamp & strobecounter?
-                    else {
-                      temp_prev_hits[current_layer].hit_x.push_back(x);
-                      temp_prev_hits[current_layer].hit_y.push_back(y);
-                      temp_prev_hits[current_layer].strobecounter = strobecounter;
-                      planes[current_layer]->PushPixel(x, y, 1, (unsigned int)0);
-                    }
-                    jHit++;
-                  } while (jHit < m_pixhits[istack][current_layer].hit_x.size())  // comparing hits to previous ones
 
+                if (m_pixhits.size() == 0) {
+                  temp_prev_hits[current_layer].hit_x.push_back(x);
+                  temp_prev_hits[current_layer].hit_y.push_back(y);
+                  planes[current_layer]->PushPixel(x, y, 1, (unsigned int)0);
+                } else 
+                  // fill up first previous events
+                  bool duplicate = false;
+
+                if (1) {
+                  int istack = 0;
+                  while (m_pixhits.size() != 0 && istack < m_pixhits.size()) {
+                    unsigned long jHit = 0;
+                    while (jHit < m_pixhits[istack][current_layer].hit_x.size()) {
+                      if (x == m_pixhits[istack][current_layer].hit_x[jHit] && y == m_pixhits[istack][current_layer].hit_y[jHit]) {
+                        duplicate = true;
+                        break;
+                      }
+                      jHit++;
+                    } // current layer hit loop
+                    if (duplicate)
+                      break;
+                    istack++;
+                  } // m_pixhit loop (10 stacks)
+                }
+                if (!duplicate) {
+                  temp_prev_hits[current_layer].hit_x.push_back(x);
+                  temp_prev_hits[current_layer].hit_y.push_back(y);
+                  planes[current_layer]->PushPixel(x, y, 1, (unsigned int)0);
                 }
               }
             }
@@ -740,7 +761,10 @@ namespace eudaq {
           } else {
             sev.SetTimestamp(timestamps[0]);
           }
+
+          PushEventsToQueue(temp_prev_hits);
         }
+
       }
       // Add the planes to the StandardEvent
       for (int i = 0; i < m_nLayers; i++) {
@@ -749,10 +773,6 @@ namespace eudaq {
       }
       delete[] planes;
 
-      m_pixhits.push_end(temp_prev_hits);  // after finishing all stuff, change m_pixhits to current event pixhit data
-      int number_of_triggers = 10;
-      if (m_pixhits.size() > number_of_triggers) 
-        m_pixhits.pop_front();
       // Indicate that data was successfully converted
       return true;
 #endif
@@ -877,7 +897,7 @@ protected:
   string *m_configs;
   int *m_chip_type;
   unsigned int *m_fw_version;
-  deque <vector<LayerPixHits> > m_pixhits;
+  mutable deque <vector<LayerPixHits> > m_pixhits;
   int *m_Vaux;
   int *m_VresetP;
   int *m_VresetD;
@@ -1089,6 +1109,18 @@ protected:
       return true;
 #endif
     return false;
+  }
+
+  bool PushEventsToQueue(vector<LayerPixHits> prev_hits) const {
+    m_pixhits.push_back(prev_hits); // after finishing all stuff, change m_pixhits to current event pixhit data
+    int number_of_triggers = 10;
+//    cout << m_pixhits.size() << endl;
+    if (m_pixhits.size() > number_of_triggers)  {
+      m_pixhits.pop_front();
+//      cout << m_pixhits.size() << endl;
+    }
+
+    return true;
   }
 
 private:
