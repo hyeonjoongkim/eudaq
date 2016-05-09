@@ -36,6 +36,7 @@ typedef unsigned __int64 uint64_t;
 #include <iterator>
 #include <fstream>
 #include <vector>
+#include <deque>
 #include <cstdlib>
 #include <algorithm>
 #include <cmath>
@@ -154,7 +155,6 @@ namespace eudaq {
 
       m_chip_type = new int[m_nLayers];
       m_fw_version = new unsigned int[m_nLayers];
-      m_pixhits.resize(m_nLayers);
 
       m_Vaux = new int[m_nLayers];
       m_VresetP = new int[m_nLayers];
@@ -657,19 +657,21 @@ namespace eudaq {
                 // adjust the bottom-right pixel
                 if ((hits[iHit].address % 4) == 0) y += 1;
 
-                unsigned long jHit = 0;
-                do {
-                  if (x == m_pixhits[current_layer].hit_x[jHit]  && y == m_pixhits[current_layer].hit_y[jHit] || isEmpty)
-                    continue; // need to make more conditions : comparing timestamp & strobecounter?
-                  else {
-                    temp_prev_hits[current_layer].hit_x.push_back(x);
-                    temp_prev_hits[current_layer].hit_y.push_back(x);
-                    temp_prev_hits[current_layer].strobecounter = strobecounter;
-                    planes[current_layer]->PushPixel(x, y, 1, (unsigned int)0);
-                  }
-                  jHit++;
-                } while (jHit < m_pixhits[current_layer].hit_x.size())  // comparing hits to previous ones
+                for (int istack = 0; istack < m_pixhits.size(); istack++) {
+                  unsigned long jHit = 0;
+                  do {
+                    if (x == m_pixhits[istack][current_layer].hit_x[jHit]  && y == m_pixhits[istack][current_layer].hit_y[jHit] || isEmpty)
+                      continue; // need to make more conditions : comparing timestamp & strobecounter?
+                    else {
+                      temp_prev_hits[current_layer].hit_x.push_back(x);
+                      temp_prev_hits[current_layer].hit_y.push_back(y);
+                      temp_prev_hits[current_layer].strobecounter = strobecounter;
+                      planes[current_layer]->PushPixel(x, y, 1, (unsigned int)0);
+                    }
+                    jHit++;
+                  } while (jHit < m_pixhits[istack][current_layer].hit_x.size())  // comparing hits to previous ones
 
+                }
               }
             }
 
@@ -746,7 +748,11 @@ namespace eudaq {
         delete planes[i];
       }
       delete[] planes;
-      m_pixhits = temp_prev_hits;  // after finishing all stuff, change m_pixhits to current event pixhit data
+
+      m_pixhits.push_end(temp_prev_hits);  // after finishing all stuff, change m_pixhits to current event pixhit data
+      int number_of_triggers = 10;
+      if (m_pixhits.size() > number_of_triggers) 
+        m_pixhits.pop_front();
       // Indicate that data was successfully converted
       return true;
 #endif
@@ -871,7 +877,7 @@ protected:
   string *m_configs;
   int *m_chip_type;
   unsigned int *m_fw_version;
-  vector<LayerPixHits> m_pixhits;
+  deque <vector<LayerPixHits> > m_pixhits;
   int *m_Vaux;
   int *m_VresetP;
   int *m_VresetD;
