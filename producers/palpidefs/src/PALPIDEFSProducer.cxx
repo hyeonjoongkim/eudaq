@@ -1278,9 +1278,12 @@ void PALPIDEFSProducer::OnStopRun() {
   }
   std::cout << "Set Running to False completed" << std::endl;
 
+  unsigned long count = 0;
   for (int i = 0; i < m_nDevices; i++) { // wait until all read transactions are done
     while (m_reader[i]->IsReading()) {
-      std::cout << "Reader is still reading, waiting 20msec.. " << std::endl;
+      if (count++ % 250 == 0) {
+	std::cout << "Reader is still reading, waiting.. " << std::endl;
+      }
       eudaq::mSleep(20);
     }
 
@@ -1297,7 +1300,7 @@ void PALPIDEFSProducer::OnStopRun() {
   while (IsFlushing() || IsStopping()) {
     eudaq::mSleep(10);
     ++wait_cnt;
-    if (wait_cnt % 100 == 0) {
+    if (wait_cnt % 1000 == 0) {
       std::string msg = "Still flushing...";
       std::cout << msg << std::endl;
       SetStatus(eudaq::Status::LVL_WARN, msg.data());
@@ -1341,6 +1344,7 @@ void PALPIDEFSProducer::OnUnrecognised(const std::string &cmd,
 
 void PALPIDEFSProducer::Loop() {
   unsigned long count = 0;
+  unsigned long flush_count = 0;
   time_t last_status = time(0);
   do {
     eudaq::mSleep(20);
@@ -1348,16 +1352,23 @@ void PALPIDEFSProducer::Loop() {
     if (!IsRunning()) {
       if (IsFlushing()) {
         if (IsStopping()) {
+	  count = 0;
+	  flush_count = 0;
           EUDAQ_INFO("SendEOR");
           SendEOR();
         }
-        EUDAQ_INFO("Flushing");
+	++flush_count;
+	if (flush_count % 250 == 0) {
+	  EUDAQ_INFO("Flushing");
+	}
         // check if any producer is waiting for EOR
         bool waiting_for_eor = false;
         for (int i = 0; i < m_nDevices; i++) {
           if (m_reader[i]->IsWaitingForEOR()) {
             waiting_for_eor = true;
-            EUDAQ_INFO("WAITING FOR EOR");
+	    if (flush_count % 250 == 0) {
+	      EUDAQ_INFO("WAITING FOR EOR");
+	    }
           }
         }
         if (!waiting_for_eor) {
