@@ -111,10 +111,6 @@ protected:
     SimpleLock lock(m_mutex);
     m_reading = reading;
   }
-  bool IsFlushing() {
-    SimpleLock lock(m_mutex);
-    return m_flushing;
-  }
   void SetStopping() {
     SimpleLock lock(m_mutex);
     m_stop = true;
@@ -137,7 +133,6 @@ protected:
   std::mutex m_mutex;
   bool m_stop;
   bool m_running;
-  bool m_flushing;
   bool m_reading;
   bool m_waiting_for_eor;
   bool m_threshold_scan_rqst;
@@ -174,14 +169,14 @@ public:
                     int debuglevel = 0)
       : eudaq::Producer(name, runcontrol), m_run(0), m_ev(0),
         m_timestamp_reference(0x0), m_done(false),
-        m_running(false), m_stopping(false), m_flush(false),
+        m_running(false), m_stopping(false),
         m_configured(false), m_firstevent(false), m_reader(0), m_next_event(0),
         m_debuglevel(debuglevel), m_testsetup(0), m_mutex(), m_nDevices(0),
         m_status_interval(-1), m_full_config_v1(), m_full_config_v2(),
         m_full_config_v3(), m_ignore_trigger_ids(true),
         m_recover_outofsync(true), m_chip_type(0x0),
         m_strobe_length(0x0), m_strobeb_length(0x0), m_trigger_delay(0x0),
-        m_readout_delay(0x0), m_chip_readoutmode(0x0), 
+        m_readout_delay(0x0), m_chip_readoutmode(0x0),
         m_monitor_PSU(false), m_back_bias_voltage(-1),
         m_dut_pos(-1.), m_SCS_charge_start(-1), m_SCS_charge_stop(-1),
         m_SCS_charge_step(-1), m_SCS_n_events(-1), m_SCS_n_mask_stages(-1),
@@ -220,10 +215,6 @@ protected:
     SimpleLock lock(m_mutex);
     return m_stopping;
   }
-  bool IsFlushing() {
-    SimpleLock lock(m_mutex);
-    return m_flush;
-  }
   bool IsDone() {
     SimpleLock lock(m_mutex);
     return m_done;
@@ -239,13 +230,12 @@ protected:
   bool m_running;
   bool m_stopping;
   bool m_configuring;
-  bool m_flush;
   bool m_configured;
   bool m_firstevent;
   DeviceReader** m_reader;
   SingleEvent** m_next_event;
   int m_debuglevel;
-  
+
 
   std::mutex m_mutex;
   TTestSetup* m_testsetup;
@@ -277,7 +267,7 @@ protected:
   bool* m_do_SCS;
 
   int m_n_trig;
-  float m_period;  
+  float m_period;
 
   // S-Curve scan output data
   unsigned char**** m_SCS_data;
