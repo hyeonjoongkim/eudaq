@@ -1303,9 +1303,10 @@ void PALPIDEFSProducer::Loop() {
   do {
     eudaq::mSleep(20);
 
-    if (!IsRunning() && IsStopping())
+    if (!IsRunning() && IsStopping()) {
       SendEOR();
-
+      count = 0;
+    }
     // build events
     while (IsRunning()) {
       int events_built = BuildEvent();
