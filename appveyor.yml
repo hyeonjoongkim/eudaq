@@ -5,6 +5,7 @@ branches:
   only:
   - master
   - v1.6-dev
+  - v1.7-dev
 
 os: Visual Studio 2015
 configuration: Release
